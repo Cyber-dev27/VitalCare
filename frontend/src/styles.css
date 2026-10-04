@@ -1,0 +1,67 @@
+:root {
+  --bg: #f2f6f4; --surface: #ffffff; --ink: #1f2d2a; --muted: #62736f; --line: #dde6e2;
+  --primary: #2f7d77; --primary-dark: #25645f; --primary-soft: #e3f1ef;
+  --ok: #3b8a5a; --ok-bg: #e4f3ea; --warn: #9a6a0e; --warn-bg: #fbf0d8; --crit: #b23b32; --crit-bg: #fbe4e1;
+  --radius: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14201e; --surface: #1c2b28; --ink: #e6efec; --muted: #9bb0aa; --line: #2d413d;
+    --primary: #5fb3ab; --primary-dark: #7cc7bf; --primary-soft: #223a37;
+    --ok: #7dd0a0; --ok-bg: #1f3a2c; --warn: #e8bf6a; --warn-bg: #3b3119; --crit: #f19088; --crit-bg: #432424;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: 'Nunito Sans', system-ui, sans-serif; line-height: 1.5; }
+h1, h2, h3 { margin: 0; font-weight: 700; }
+h1 { font-size: 1.6rem; } h2 { font-size: 1.15rem; } h3 { font-size: 1rem; }
+button, input, select, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
+
+.topbar { background: var(--surface); border-bottom: 1px solid var(--line); }
+.topbar-in { max-width: 1100px; margin: 0 auto; padding: 14px 20px; display: flex; align-items: center; gap: 10px; }
+.brand { font-weight: 700; font-size: 1.2rem; color: var(--primary); background: none; border: 0; cursor: pointer; padding: 0; }
+.wrap { max-width: 1100px; margin: 0 auto; padding: 24px 20px 60px; }
+.row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.between { justify-content: space-between; }
+.stack > * + * { margin-top: 20px; }
+.muted { color: var(--muted); font-size: .92rem; }
+
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; }
+.stat b { display: block; font-size: 1.9rem; line-height: 1.2; }
+
+.btn { background: var(--primary); color: #fff; border: 0; border-radius: 8px; padding: 9px 16px; font-weight: 600; cursor: pointer; }
+.btn:hover { background: var(--primary-dark); }
+.btn.ghost { background: transparent; color: var(--primary); border: 1px solid var(--line); }
+.btn.ghost:hover { background: var(--primary-soft); }
+.btn.danger { background: transparent; color: var(--crit); border: 1px solid var(--line); }
+.btn.danger:hover { background: var(--crit-bg); }
+.btn.small { padding: 5px 10px; font-size: .88rem; }
+
+input, select, textarea { width: 100%; padding: 9px 11px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+label { display: block; font-size: .88rem; color: var(--muted); margin-bottom: 4px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+.search { max-width: 280px; }
+
+table { width: 100%; border-collapse: collapse; }
+th, td { text-align: left; padding: 11px 10px; border-bottom: 1px solid var(--line); font-size: .95rem; }
+th { color: var(--muted); font-weight: 600; font-size: .85rem; }
+tr.click { cursor: pointer; } tr.click:hover { background: var(--primary-soft); }
+.scroll { overflow-x: auto; }
+
+.badge { display: inline-block; padding: 2px 10px; border-radius: 99px; font-size: .82rem; font-weight: 600; }
+.badge.ok { background: var(--ok-bg); color: var(--ok); }
+.badge.warn { background: var(--warn-bg); color: var(--warn); }
+.badge.crit { background: var(--crit-bg); color: var(--crit); }
+.badge.none { background: var(--line); color: var(--muted); }
+
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; }
+.tile { border-radius: var(--radius); padding: 14px 16px; border: 1px solid var(--line); background: var(--surface); border-left-width: 6px; }
+.tile.ok { border-left-color: var(--ok); } .tile.warn { border-left-color: var(--warn); } .tile.crit { border-left-color: var(--crit); }
+.tile.none { border-left-color: var(--line); }
+.tile b { font-size: 1.7rem; } .tile small { color: var(--muted); }
+
+.error { background: var(--crit-bg); color: var(--crit); padding: 10px 14px; border-radius: 8px; }
+.empty { text-align: center; padding: 30px 10px; color: var(--muted); }
+@media (max-width: 600px) { .search { max-width: none; width: 100%; } }
