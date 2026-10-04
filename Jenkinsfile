@@ -19,3 +19,4 @@ pipeline {
         }
     }
 }
+// Hello, this is a Jenkins pipeline script that defines a simple CI/CD process for a Node.js application. It consists of three stages: Checkout, Install Dependencies, and Build App.
