@@ -8,18 +8,8 @@ pipeline {
             }
         }
 
-        stage('Build Backend') {
-            steps {
-                dir('backend') {
-                    // Compiles the Spring Boot app using Maven Wrapper
-                    bat 'mvnw.cmd clean package -DskipTests'
-                }
-            }
-        }
-
         stage('Deploy Docker Stack') {
             steps {
-                // Rebuilds containers and starts services (Backend mapped to port 8083)
                 bat 'docker compose down'
                 bat 'docker compose up --build -d'
             }
