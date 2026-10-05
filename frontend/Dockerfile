@@ -2,18 +2,16 @@
 FROM node:18-alpine AS builder
 WORKDIR /app
 
-# Bust Docker build cache so RUN steps are forced to re-execute
-ARG CACHE_DATE=2026-10-06
-
 COPY package*.json ./
 
-# Install dependencies including devDependencies explicitly
-RUN npm install --include=dev
+# Install all packages and force-install vite binary
+RUN npm install
+RUN npm install -D vite @vitejs/plugin-react
 
 COPY . .
 
-# Call vite directly from local node_modules binary path
-RUN ./node_modules/.bin/vite build
+# Run Vite build
+RUN npx vite build
 
 # Production Stage
 FROM nginx:alpine
