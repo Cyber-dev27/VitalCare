@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        // Absolute path to Docker Desktop executable on Windows
-        DOCKER_BIN = 'C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.exe'
+        // AppData path found via 'where docker'
+        DOCKER_BIN = 'C:\\Users\\yogini bhatia\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe'
     }
 
     stages {
@@ -15,7 +15,6 @@ pipeline {
 
         stage('Deploy Docker Stack') {
             steps {
-                // Uses full path to docker.exe to avoid PATH issues
                 bat '"%DOCKER_BIN%" compose down'
                 bat '"%DOCKER_BIN%" compose up --build -d'
             }
