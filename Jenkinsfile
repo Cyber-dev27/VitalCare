@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        // Adds Docker's Windows installation path to Jenkins PATH
-        PATH = "C:\\Program Files\\Docker\\Docker\\resources\\bin;${env.PATH}"
+        // Absolute path to Docker Desktop executable on Windows
+        DOCKER_BIN = 'C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.exe'
     }
 
     stages {
@@ -15,15 +15,15 @@ pipeline {
 
         stage('Deploy Docker Stack') {
             steps {
-                // Docker Compose builds and starts all containers automatically
-                bat 'docker compose down'
-                bat 'docker compose up --build -d'
+                // Uses full path to docker.exe to avoid PATH issues
+                bat '"%DOCKER_BIN%" compose down'
+                bat '"%DOCKER_BIN%" compose up --build -d'
             }
         }
 
         stage('Verify Running Containers') {
             steps {
-                bat 'docker compose ps'
+                bat '"%DOCKER_BIN%" compose ps'
             }
         }
     }
