@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    environment {
+        // Adds Docker binary folder to PATH for this pipeline session
+        PATH = "C:\\Program Files\\Docker\\Docker\\resources\\bin;${env.PATH}"
+    }
+
     stages {
         stage('Checkout Code') {
             steps {
