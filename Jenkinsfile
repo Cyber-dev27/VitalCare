@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        // AppData path found via 'where docker'
-        DOCKER_BIN = 'C:\\Users\\yogini bhatia\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe'
+        // Includes both Docker Desktop bin and cli-plugins in the PATH
+        PATH = "C:\\Users\\yogini bhatia\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin;C:\\Users\\yogini bhatia\\AppData\\Local\\Programs\\DockerDesktop\\resources\\cli-plugins;${env.PATH}"
     }
 
     stages {
@@ -15,14 +15,14 @@ pipeline {
 
         stage('Deploy Docker Stack') {
             steps {
-                bat '"%DOCKER_BIN%" compose down'
-                bat '"%DOCKER_BIN%" compose up --build -d'
+                bat 'docker compose down'
+                bat 'docker compose up --build -d'
             }
         }
 
         stage('Verify Running Containers') {
             steps {
-                bat '"%DOCKER_BIN%" compose ps'
+                bat 'docker compose ps'
             }
         }
     }
