@@ -12,6 +12,8 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        CACHE_DATE: 20261006
     container_name: vitalcare-frontend
     ports:
       - "80:80"
