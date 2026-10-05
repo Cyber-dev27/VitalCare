@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        // Adds Docker binary folder to PATH for this pipeline session
+        // Adds Docker's Windows installation path to Jenkins PATH
         PATH = "C:\\Program Files\\Docker\\Docker\\resources\\bin;${env.PATH}"
     }
 
@@ -10,6 +10,14 @@ pipeline {
         stage('Checkout Code') {
             steps {
                 checkout scm
+            }
+        }
+
+        stage('Build Backend') {
+            steps {
+                dir('backend') {
+                    bat 'mvnw.cmd clean package -DskipTests'
+                }
             }
         }
 
