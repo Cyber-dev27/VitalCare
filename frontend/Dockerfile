@@ -1,7 +1,6 @@
-FROM node:18-alpine
+FROM eclipse-temurin:17-jdk-alpine
 WORKDIR /app
-COPY package*.json ./
-RUN npm install
 COPY . .
-EXPOSE 3000
-CMD ["npm", "run", "dev"]
+RUN ./mvnw clean package -DskipTests
+EXPOSE 5000
+CMD ["java", "-jar", "target/*.jar"]

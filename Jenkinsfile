@@ -2,8 +2,7 @@ pipeline {
     agent any
 
     environment {
-        // Includes both Docker Desktop bin and cli-plugins in the PATH
-        PATH = "C:\\Users\\yogini bhatia\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin;C:\\Users\\yogini bhatia\\AppData\\Local\\Programs\\DockerDesktop\\resources\\cli-plugins;${env.PATH}"
+        PATH = "C:\\Program Files\\Docker\\Docker\\resources\\bin;C:\\Program Files\\Docker\\Docker\\resources;${env.PATH}"
     }
 
     stages {
