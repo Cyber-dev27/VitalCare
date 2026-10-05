@@ -13,11 +13,12 @@ pipeline {
         }
 
         stage('Deploy Docker Stack') {
-            steps {
-                bat 'docker compose down'
-                bat 'docker compose up --build -d'
-            }
-        }
+    steps {
+        bat 'docker compose down --volumes --remove-orphans'
+        bat 'docker rm -f vitalcare-backend vitalcare-frontend vitalcare-grafana || exit 0'
+        bat 'docker compose up --build -d'
+    }
+}
 
         stage('Verify Running Containers') {
             steps {
