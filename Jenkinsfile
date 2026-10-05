@@ -13,16 +13,9 @@ pipeline {
             }
         }
 
-        stage('Build Backend') {
-            steps {
-                dir('backend') {
-                    bat 'mvnw.cmd clean package -DskipTests'
-                }
-            }
-        }
-
         stage('Deploy Docker Stack') {
             steps {
+                // Docker Compose builds and starts all containers automatically
                 bat 'docker compose down'
                 bat 'docker compose up --build -d'
             }
