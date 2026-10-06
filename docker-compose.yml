@@ -1,4 +1,20 @@
 services:
+  db:
+    image: mysql:8.0
+    container_name: vitalcare-db
+    environment:
+      MYSQL_ROOT_PASSWORD: vitalpass
+      MYSQL_DATABASE: vitalcare
+    volumes:
+      - dbdata:/var/lib/mysql
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -pvitalpass --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: always
+
   backend:
     build:
       context: ./backend
@@ -6,6 +22,13 @@ services:
     container_name: vitalcare-backend
     ports:
       - "8083:8083"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/vitalcare?serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: vitalpass
     restart: always
 
   frontend:
@@ -33,3 +56,4 @@ services:
 
 volumes:
   grafana_data:
+  dbdata:
