@@ -1,0 +1,35 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: vitalcare-backend
+    ports:
+      - "8083:8083"
+    restart: always
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        CACHE_DATE: 20261006
+    container_name: vitalcare-frontend
+    ports:
+      - "80:80"
+    restart: always
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: vitalcare-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana_data:/var/lib/grafana
+    restart: always
+
+volumes:
+  grafana_data:
