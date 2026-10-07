@@ -1,38 +1,22 @@
 pipeline {
     agent any
 
-    environment {
-        PATH = "C:\\Program Files\\Docker\\Docker\\resources\\bin;C:\\Program Files\\Docker\\Docker\\resources;${env.PATH}"
-    }
-
     stages {
-        stage('Checkout Code') {
+        stage('Checkout') {
             steps {
                 checkout scm
             }
         }
-
-        stage('Deploy Docker Stack') {
-    steps {
-        bat 'docker compose down --volumes --remove-orphans'
-        bat 'docker rm -f vitalcare-backend vitalcare-frontend vitalcare-grafana || exit 0'
-        bat 'docker compose up --build -d'
-    }
-}
-
-        stage('Verify Running Containers') {
+        stage('Install Dependencies') {
             steps {
-                bat 'docker compose ps'
+                sh 'npm install'
+            }
+        }
+        stage('Build App') {
+            steps {
+                sh 'npm run build'
             }
         }
     }
-
-    post {
-        failure {
-            echo 'Pipeline build failed. Jira Scrum board and backlog remain untouched.'
-        }
-        success {
-            echo 'Pipeline deployed successfully! Backend is accessible on http://localhost:8083'
-        }
-    }
 }
+// Hello, this is a Jenkins pipeline script that defines a simple CI/CD process for a Node.js application. It consists of three stages: Checkout, Install Dependencies, and Build App.
