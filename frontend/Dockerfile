@@ -1,20 +1,13 @@
-# Build Stage
-FROM node:18-alpine AS builder
+FROM node:20-alpine AS builder
 WORKDIR /app
-
 COPY package*.json ./
-
-# Install all packages and force-install vite binary
-RUN npm install
-RUN npm install -D vite @vitejs/plugin-react
-
+RUN npm ci
 COPY . .
+# Browser calls /api on the same address; nginx forwards it to the backend
+ENV VITE_API_URL=/api
+RUN npm run build
 
-# Run Vite build
-RUN npx vite build
-
-# Production Stage
-FROM nginx:alpine
+FROM nginx:1.27-alpine
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=builder /app/dist /usr/share/nginx/html
 EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]

@@ -1,22 +1,52 @@
 pipeline {
-    agent any
+  agent any
 
-    stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
-        stage('Install Dependencies') {
-            steps {
-                sh 'npm install'
-            }
-        }
-        stage('Build App') {
-            steps {
-                sh 'npm run build'
-            }
-        }
+  options {
+    timestamps()
+    disableConcurrentBuilds()
+  }
+
+  stages {
+    stage('Checkout') {
+      steps { checkout scm }
     }
+
+    stage('Build images') {
+      steps {
+        withCredentials([string(credentialsId: 'vitalcare-db-password', variable: 'DB_PASSWORD')]) {
+          bat 'docker compose build'
+        }
+      }
+    }
+
+    stage('Deploy') {
+      steps {
+        withCredentials([string(credentialsId: 'vitalcare-db-password', variable: 'DB_PASSWORD')]) {
+          // No --volumes: keeps patient data between deployments
+          bat 'docker compose up -d --remove-orphans'
+        }
+      }
+    }
+
+    stage('Smoke test') {
+      steps {
+        powershell '''
+          $ok = $false
+          for ($i = 0; $i -lt 30; $i++) {
+            try {
+              Invoke-WebRequest -UseBasicParsing http://localhost:8083/api/patients | Out-Null
+              $ok = $true; break
+            } catch { Start-Sleep -Seconds 5 }
+          }
+          if (-not $ok) { docker compose logs --tail=50 backend; exit 1 }
+          Write-Host "VitalCare API is up"
+        '''
+      }
+    }
+  }
+
+  post {
+    success { echo 'Deployed. Open http://localhost (or your FRONTEND_PORT).' }
+    failure { echo 'Build failed. Read the first error above this line.' }
+  }
 }
-// Hello, this is a Jenkins pipeline script that defines a simple CI/CD process for a Node.js application. It consists of three stages: Checkout, Install Dependencies, and Build App.
